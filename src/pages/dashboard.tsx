@@ -18,9 +18,9 @@ const Dashboard = () => {
 
   const numOfPages = Math.max(pages.data?.pages[0]?.numOfPages ?? 0, 1);
 
-  function createNewCard() {
+  const createNewCard = (): void => {
     console.log("hi");
-  }
+  };
 
   return (
     <main className="flex flex-col items-center p-4">
