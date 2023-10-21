@@ -2,25 +2,32 @@
 import { useSession } from "next-auth/react";
 import UserAuthPanel from "~/components/user-auth-panel";
 import { Spinner } from "evergreen-ui";
-import { useRouter } from "next/router";
-import DocPanel from "~/components/doc-panel";
+import { UploadButton } from "~/utils/uploadthing";
 
 export default function Home() {
   const { status } = useSession();
-  const router = useRouter();
-
-  if (status === "authenticated") {
-    void router.push("/dashboard");
-  }
 
   return (
     <main className="min-h-screen font-sans">
       {status === "unauthenticated" && <UserAuthPanel />}
+      {status === "authenticated" && <div>You are signed-in</div>}
       {status === "loading" && (
         <div className="flex h-screen w-full items-center justify-center">
           <Spinner />
         </div>
       )}
+      <UploadButton
+        endpoint="imageUploader"
+        onClientUploadComplete={(res) => {
+          // Do something with the response
+          console.log("Files: ", res);
+          alert("Upload Completed");
+        }}
+        onUploadError={(error: Error) => {
+          // Do something with the error.
+          alert(`ERROR! ${error.message}`);
+        }}
+      />
     </main>
   );
 }

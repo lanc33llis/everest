@@ -20,6 +20,7 @@
     "@trpc/next": "^10.37.1",
     "@trpc/react-query": "^10.37.1",
     "@trpc/server": "^10.37.1",
+    "@uploadthing/react": "^5.7.0",
     "evergreen-ui": "^7.1.9",
     "next": "^13.5.4",
     "next-auth": "^4.23.0",
@@ -29,6 +30,7 @@
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.4",
     "superjson": "^1.13.1",
+    "uploadthing": "^5.7.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {
