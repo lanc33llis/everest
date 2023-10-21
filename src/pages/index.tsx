@@ -16,7 +16,7 @@ export default function Home() {
                     <Spinner />
                 </div>
             )}
-            <UploadButton
+             <UploadButton
                 endpoint="imageUploader"
                 onClientUploadComplete={(res) => {
                     // Do something with the response
