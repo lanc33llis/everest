@@ -1,9 +1,12 @@
 import { signIn } from "next-auth/react";
+import { Button } from "evergreen-ui";
 
 const UserAuthPanel = () => {
   return (
     <div className="flex h-screen flex-col items-center justify-center">
-      <button onClick={() => signIn("google")}>Google Sign-in</button>
+      <Button height={56} onClick={() => signIn("google")}>
+        Sign in
+      </Button>
     </div>
   );
 };
