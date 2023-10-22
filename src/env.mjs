@@ -36,6 +36,7 @@ export const env = createEnv({
     GOOGLE_PROJECT_ID: z.string(),
     GOOGLE_LOCATION: z.string(),
     GOOGLE_ENDPOINT_ID: z.string(),
+    PALM_API: z.string(),
     // // Add ` on ID and SECRET if you want to make sure they're not empty
     // DISCORD_CLIENT_ID: z.string(),
     // DISCORD_CLIENT_SECRET: z.string(),
@@ -68,6 +69,7 @@ export const env = createEnv({
     GOOGLE_PROJECT_ID: process.env.GOOGLE_PROJECT_ID,
     GOOGLE_LOCATION: process.env.GOOGLE_LOCATION,
     GOOGLE_ENDPOINT_ID: process.env.GOOGLE_ENDPOINT_ID,
+    PALM_API: process.env.PALM_API,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

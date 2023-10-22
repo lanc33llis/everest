@@ -1,5 +1,4 @@
 import { z } from "zod";
-
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const userRouter = createTRPCRouter({
@@ -37,5 +36,63 @@ export const userRouter = createTRPCRouter({
         nextCursor,
         numOfPages,
       };
+    }),
+
+  createPage: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        content: z.string(),
+        user: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const page = await ctx.db.notePage.create({
+        data: {
+          name: input.name,
+          content: input.content,
+          createdById: input.user,
+        },
+      });
+
+      return page;
+    }),
+
+  getPage: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const page = await ctx.db.notePage.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      return page;
+    }),
+
+  updatePage: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        content: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const page = await ctx.db.notePage.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+          content: input.content,
+        },
+      });
+
+      return page;
     }),
 });

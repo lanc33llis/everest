@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.tox.tox-tinymce {
+  @apply border-[#c1c4d6];
+  @apply border;
+  @apply rounded-md;
+}
+
+.__Latex__ {
+  @apply truncate;
+  white-space: pre-wrap;
+}

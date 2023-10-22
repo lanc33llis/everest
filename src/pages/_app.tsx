@@ -6,6 +6,8 @@ import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 import "rsuite/dist/rsuite.css";
+import "katex/dist/katex.min.css";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
