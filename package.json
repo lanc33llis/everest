@@ -9,7 +9,8 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "vercel-build": "npm install gcc-c++ cairo-devel pango-devel libjpeg-turbo-devel giflib-devel"
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^5.3.1",
@@ -29,6 +30,7 @@
     "aws-amplify": "^5.3.11",
     "axios": "^1.5.1",
     "canvas": "^2.11.2",
+    "pdfjs-dist": "^3.8.162",
     "evergreen-ui": "^7.1.9",
     "google-auth-library": "^9.1.0",
     "googleapis": "^128.0.0",
