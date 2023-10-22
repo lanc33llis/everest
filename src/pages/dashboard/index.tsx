@@ -12,7 +12,7 @@ import {
   Paragraph,
   DashboardIcon,
 } from "evergreen-ui";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
@@ -52,21 +52,22 @@ const Dashboard = () => {
 
   const [createNewPageName, setCreateNewPageName] = useState("Untitled");
   return (
-    <main className="flex min-h-screen items-center">
-      <div className="absolute top-0 flex h-16 w-full items-center justify-end px-5">
-        <button className="h-[32px]" onClick={() => setShowUserSettings(true)}>
-          <Avatar name={session?.user.name} size={32} />
-        </button>
-      </div>
+    <main className="text-textcolor flex min-h-screen items-center font-sans">
       {pages.isLoading && (
         <div className="absolute top-0 z-10 flex h-screen w-full items-center justify-center bg-white">
           <Spinner />
         </div>
       )}
-      <div className="flex h-screen  w-full  grow flex-col items-center px-24 pb-4 pt-16">
-        <p className="w-full pb-8 text-4xl font-extrabold">Everest</p>
+      <div className="flex h-screen w-full  grow flex-col items-center px-24 pb-4 pt-16">
+        <div className="mx-2 mb-4 flex w-full  items-center justify-between">
+          <p className="mb-0 text-4xl font-bold">
+            Welcome,{" "}
+            <span className="font-extrabold">{session?.user.name}</span>
+          </p>
+          <button onClick={() => signOut()}>Sign out</button>
+        </div>
         <div className="flex w-full grow flex-wrap gap-4 ">
-          <div className="h-36 w-36">
+          <div className="h-56 w-56">
             <Dialog
               isShown={isShown}
               title="Enter your filename: "
@@ -107,7 +108,7 @@ const Dashboard = () => {
             </button>
           </div>
           {pages.data?.pages[page]?.items.map((card) => (
-            <div className="h-36 w-36" key={card.id}>
+            <div className="text-textcolor h-56 w-56 font-sans" key={card.id}>
               <Link
                 href={`/dashboard/${card.id}`}
                 className="flex h-full w-full flex-col items-center rounded border text-center !no-underline transition-all hover:bg-zinc-50"

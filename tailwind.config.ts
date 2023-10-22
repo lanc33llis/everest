@@ -7,6 +7,9 @@ export default withUt({
   theme: {
     extend: {
       fontFamily: {},
+      colors: {
+        textcolor: "#37352f",
+      },
     },
   },
   plugins: [],

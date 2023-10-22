@@ -1,12 +1,10 @@
 import { z } from "zod";
 import * as fs from "fs";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { env } from "~/env.mjs";
 import { TextServiceClient } from "@google-ai/generativelanguage";
 import { jsonrepair } from "jsonrepair";
 import { convert } from "html-to-text";
-import { fromBuffer } from "pdf2pic";
-import { ImageAnnotatorClient } from "@google-cloud/vision";
+import { pdfToPng } from "pdf-to-png-converter";
 
 interface Flashcard {
   title: string;
@@ -26,10 +24,6 @@ const textServiceClient = new TextServiceClient({
   credentials: gauth,
 });
 
-const imageAnnotatorClient = new ImageAnnotatorClient({
-  credentials: gauth,
-});
-
 const runInference = async (prompt: string): Promise<string> => {
   const res = await textServiceClient.generateText({
     model: "models/text-bison-001",
@@ -44,22 +38,6 @@ const runInference = async (prompt: string): Promise<string> => {
   return result.join("");
 };
 
-const runImageInference = async (images: string[]): Promise<string> => {
-  const batch_request = images.map((image_b64) => ({
-    image: { content: image_b64 },
-  }));
-  const res = await imageAnnotatorClient.batchAnnotateImages({
-    requests: batch_request,
-  });
-
-  let result = "";
-  res[0].responses?.forEach((response) => {
-    result += response.fullTextAnnotation?.text;
-  });
-
-  return result;
-};
-
 export const inferenceRouter = createTRPCRouter({
   createFlashcards: protectedProcedure
     .input(
@@ -70,17 +48,22 @@ export const inferenceRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       console.log(convert(input.textInput));
-
+      if (input.textInput === "") return {};
       const prompt = `
-      Create flash cards of the following notes for school and academic purposes. 
-      For each question or problem there should be a title, the question, of the flash card and a body, the answer, of the flash card which contains notes in bullet point form/
+      Generate flash cards from the following notes for school and academic purposes per 100 characters.
+      Each flash card must have concise title and body.
+      The title must be a question or problem that the student can answer or solve that's related to the notes.
+      The body must be a complete answer to the question or problem in the body. You must provide an answer. If you cannot, then do not generate the flash card.
       Respond with a JSON using the exact following format return this only and nothing else.
       "{
-         "cards": // array
-           [{
-             title: // string
-             body: // string
-           }]
+         "cards":
+           [
+            {
+              title: string,
+              body: string
+            },
+            ...
+          ]
         }
       }"
 
@@ -88,16 +71,35 @@ export const inferenceRouter = createTRPCRouter({
       {
         "cards": [
           {
-            "title": "Question 1",
-            "body": "Answer 1"
-          }, {
-            "title": "Question 2",
-            "body": "Answer 2"
+            "title": "What is the capital of France?",
+            "body": "Paris"
+          }, 
+          {
+            "title": "2+2=?",
+            "body": "4"
           }
         ]
       }
+      
+      Here is an example of an invalid JSON response:
+      \`\`\`json
+      {
+        "cards": [
+          {
+            "title": "What is the capital of France?",
+            "body": "Paris"
+          }, 
+          {
+            "title": "2+2=?",
+            "body": "4"
+          }
+        ]
+      }
+      \`\`\`
+      You should output only the JSON body and not the JSON specifier at the top.
+
       You are allowed to use inline LaTeX code but not block code, meaning that your LaTeX should be surrounded by only one $ sign.
-      Make sure to double check and make sure that it is valid LaTeX code.
+      You should always double check to make sure that the LaTeX is valid and renders correctly.
       Also make sure that the body is always a single string and not an array of strings.
 
       Text Input:
@@ -116,7 +118,7 @@ export const inferenceRouter = createTRPCRouter({
         },
       });
 
-      const notepage = await ctx.db.notePage.update({
+      await ctx.db.notePage.update({
         where: {
           id: input.notepage_id,
         },
@@ -161,16 +163,16 @@ export const inferenceRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input, ctx }) => {
+      if (input.textInput === "") return;
       const prompt = `
-      Please provide a concise and accurate summary of the following notes and academic text that may contain LaTeX code:
+      Please provide a concise and accurate summary of the following notes and academic text using Markdown.
+      Your summary should effectively distill the key points, main ideas, and critical information present in the original text. 
+      Additionally, make sure to correct any grammatical errors and spelling mistakes.
+      Additionally, make sure to correct any misconceptions and errors in the original notes to prevent the student from learning misinformation.
+      Make sure to double check and make sure that it is valid Markdown code.
 
       Text Input:
-      ${input.textInput}
-
-      Your summary should effectively distill the key points, main ideas, and critical information present in the original text. 
-      The summary should be easily understandable and quick and you are allowed to display valid block LaTeX.
-      Make sure to validitate and double check your LaTeX code before submitting it.
-      `;
+      ${convert(input.textInput)}`;
 
       const out = await runInference(prompt);
 
@@ -205,30 +207,5 @@ export const inferenceRouter = createTRPCRouter({
       }
 
       return notepage.summary;
-    }),
-  getPDFText: protectedProcedure
-    .input(
-      z.object({
-        pdf_b64: z.string(),
-      }),
-    )
-    .mutation(async ({ input, ctx }) => {
-      const buffer = Buffer.from(input.pdf_b64, "base64");
-      const images = await fromBuffer(buffer)
-        .bulk(-1, {
-          responseType: "base64",
-        })
-        .then((res) => res.map((image) => image.base64));
-
-      let out = "";
-
-      images.forEach((image) => {
-        const res = runImageInference(image!).then((res) => {
-          out += res;
-          return res;
-        });
-      });
-
-      return out;
     }),
 });

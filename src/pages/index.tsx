@@ -12,7 +12,16 @@ export default function Home() {
 
   return (
     <main className="min-h-screen font-sans">
-      {status === "unauthenticated" && <UserAuthPanel />}
+      {status === "unauthenticated" && (
+        <>
+          <div className="justiify-center flex flex-col align-middle">
+            <span className="text-textcolor display  flex justify-center align-middle font-sans text-6xl font-extrabold">
+              Everest
+            </span>
+            <UserAuthPanel />
+          </div>
+        </>
+      )}
       {status === "loading" && (
         <div className="flex h-screen w-full items-center justify-center">
           <Spinner />

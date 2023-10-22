@@ -9,7 +9,12 @@
   @apply rounded-md;
 }
 
-.__Latex__ {
-  @apply truncate;
-  white-space: pre-wrap;
+.header p {
+  @apply line-clamp-2;
+}
+
+.description p {
+  /* @apply truncate; */
+  @apply line-clamp-3;
+  /* @apply inline-block; */
 }
