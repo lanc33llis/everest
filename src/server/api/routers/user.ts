@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
-export const pagesRouter = createTRPCRouter({
+export const userRouter = createTRPCRouter({
   getUserPages: protectedProcedure
     .input(
       z.object({

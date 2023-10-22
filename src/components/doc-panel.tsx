@@ -1,10 +1,6 @@
 import { Panel, Placeholder, Row, Col, type PanelProps } from "rsuite";
 
-export const Card = (props: PanelProps) => (
-  <Panel {...props} bordered>
-    <Placeholder.Paragraph />
-  </Panel>
-);
+export const Card = (props: PanelProps) => <Panel {...props} />;
 
 const DocPanel = () => (
   <Row>

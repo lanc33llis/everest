@@ -1,9 +1,0 @@
-{
-    "instances": [
-    {
-        "prompt": "write a poem",
-        "max_length": 200,
-        "top_k": 20
-    }
-    ]
-}
