@@ -10,7 +10,7 @@
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start",
-    "vercel-build": "npm install gcc-c++ cairo-devel pango-devel libjpeg-turbo-devel giflib-devel"
+    "vercel-build": "yum install gcc-c++ cairo-devel pango-devel libjpeg-turbo-devel giflib-devel"
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^5.3.1",
