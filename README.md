@@ -1,5 +1,4 @@
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
-<a name="readme-top"></a>
 <!--
 *** Thanks for checking out the Best-README-Template. If you have a suggestion
 *** that would make this better, please fork the repo and create a pull request
@@ -24,7 +23,7 @@
 <!-- ABOUT THE PROJECT -->
 ## Everest
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+![Screenshot](screenshots/screenshot.jpg)
 
 Studying with your own notes may end up being inefficient because you may not know what topics are important or related to each other. This lack of clarity often leads to information overload and struggles with retention. Our inspiration stems from the need to simplify the learning process, making it easier to identify key information and relationships between topics.
 
@@ -41,19 +40,8 @@ Everest is a modern note-taking / study app with three main features:
 - tRPC
 - Google PaLM 2
 - Google Vision AI
+- Uploadthing
 
 <!-- GETTING STARTED -->
-
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
 
 
