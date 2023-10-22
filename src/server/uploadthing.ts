@@ -7,10 +7,13 @@ import fetch from "node-fetch";
 import { pdfToPng } from "pdf-to-png-converter";
 import { db } from "./db";
 import { z } from "zod";
+import { env } from "~/env.mjs";
 
 const f = createUploadthing();
 
-const gauth = JSON.parse(fs.readFileSync("./gauth.json").toString()) as {
+const gauth = JSON.parse(
+  Buffer.from(env.GOOGLE_GAUTH_BASE64, "base64").toString("utf-8"),
+) as {
   client_email: string;
   private_key: string;
 };

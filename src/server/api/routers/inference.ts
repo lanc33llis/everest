@@ -5,6 +5,7 @@ import { TextServiceClient } from "@google-ai/generativelanguage";
 import { jsonrepair } from "jsonrepair";
 import { convert } from "html-to-text";
 import { pdfToPng } from "pdf-to-png-converter";
+import { env } from "~/env.mjs";
 
 interface Flashcard {
   title: string;
@@ -15,7 +16,9 @@ interface Flashcards {
   cards: Flashcard[];
 }
 
-const gauth = JSON.parse(fs.readFileSync("./gauth.json").toString()) as {
+const gauth = JSON.parse(
+  Buffer.from(env.GOOGLE_GAUTH_BASE64, "base64").toString("utf-8"),
+) as {
   client_email: string;
   private_key: string;
 };
